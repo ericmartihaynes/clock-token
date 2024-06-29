@@ -10,10 +10,9 @@ contract ClockToken is ERC20 {
     constructor() ERC20("Current Time", "CLOCK") {}
 
     function balanceOf(address account) public view override returns (uint256) {
-        int256 offset = hourOffset[account] * int256(10 ** decimals()) + minuteOffset[account] * int256(10 ** (decimals() - 2));
-        uint256 secondsToday = (block.timestamp % 1 days);
-        uint256 time = secondsToday / 1 hours * 10 ** decimals() + (secondsToday % 1 hours) / 1 minutes * 10 ** (decimals() - 2);
-        return  uint256(int256(time) + offset);
+        int256 offset = hourOffset[account] * 1 hours + minuteOffset[account] * 1 minutes;
+        uint256 secondsToday = uint256(int256(block.timestamp) + offset) % 1 days;
+        return secondsToday / 1 hours * 10 ** decimals() + (secondsToday % 1 hours) / 1 minutes * 10 ** (decimals() - 2);
     }
 
     function offsetHours(int256 _hours) external {
